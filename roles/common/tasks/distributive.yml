@@ -7,6 +7,7 @@
   tags:
     - distributive
     - common
+    - packaging
 
 - name: create consul configuration directory
   sudo: yes
@@ -18,6 +19,7 @@
     - consul
     - distributive
     - common
+    - packaging
 
 - name: create symlink to distributive common checklist
   sudo: yes
@@ -29,6 +31,7 @@
     - consul
     - distributive
     - common
+    - packaging
 
 # We don't reload because consul hasn't been installed
 - name: register distributive tests with consul
@@ -40,3 +43,4 @@
     - consul
     - distributive
     - common
+    - packaging

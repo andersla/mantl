@@ -1,0 +1,169 @@
+variable subnet_cidr { default = "10.0.0.0/24" }
+variable public_key { default = "/home/anders/projekt/phenomenal/ssh/cloud.key.pub" }
+
+variable name { default = "smog-mantl-v1" }     # resources will start with this plus "-"
+variable control_count { default = "1"} # mesos masters, zk leaders, consul servers
+variable worker_count { default = "1"}  # worker nodes
+variable edge_count { default = "1"}    # load balancer nodes
+
+#
+# you also need to create a sequrity group where you enable ping and ssh
+#
+
+
+# Run 'nova network-list' to get these names and values
+# Floating ips are optional
+# One way of finding external uuid is to create a router and check the "External Gateway network ID"
+# router has to have dns
+variable external_network_uuid { default = "a7a9762b-3d9e-45c8-85c5-a939b60cd0f2" }
+#variable external_network_uuid { default = "cc614864-7a55-41c8-ad85-3979dbf1952c" }
+variable floating_ip_pool { default = "ext-net" }
+
+# Run 'nova image-list' to get your image name
+variable image_name_edge  { default = "phenomenal_mantl_openstack_ansible_packaged_edge_1a" }
+variable image_name_control  { default = "phenomenal_mantl_openstack_ansible_packaged_control_1a" }
+variable image_name_worker  { default = "phenomenal_mantl_openstack_ansible_packaged_worker_1a" }
+
+#variable image_name_edge  { default = "CentOS7" }
+#variable image_name_control  { default = "CentOS7" }
+#variable image_name_worker  { default = "CentOS7" }
+
+#variable image_name_edge  { default = "phenomenal-mantl-openstack-v1a" }
+#variable image_name_control  { default = "phenomenal-mantl-openstack-v1a" }
+#variable image_name_worker  { default = "phenomenal-mantl-openstack-v1a" }
+
+
+#
+# OpenStack credentials and provider environment vars (including OS_REGION_NAME) is setup by running script:
+# source /home/anders/projekt/phenomenal/smog_openstack_set_credentials_environment_c2015037-openrc.sh
+# This script is downloadable from OpenStack dashboard -> Access and Sequrity
+#
+# Configure the OpenStack Provider
+provider "openstack" {
+#    # api_key  = "blablabla" 
+#    user_name  = "andersl"
+#    tenant_name = "c2015037"
+#    password  = "${file("/home/anders/projekt/phenomenal/passw/smog_passw.txt")}"
+#    auth_url  = "http://smog.uppmax.uu.se:5000/v2.0"
+}
+
+#  Openstack flavors control the size of the instance, i.e. m1.xlarge.
+#  Run 'nova flavor-list' to list the flavors in your environment
+#  Below are typical settings for mantl
+variable control_flavor_name { default = "m1.large" }
+variable worker_flavor_name { default = "m1.large" }
+variable edge_flavor_name { default = "m1.large" }
+
+module "ssh-key" {
+  source = "./terraform/openstack/keypair_v2"
+  public_key = "${var.public_key}"
+  keypair_name = "${var.name}_keypair"
+}
+
+# Create floating IPs for each of the roles
+# These are not required if your network is exposed to the internet
+# or you don't want floating ips for the instances.
+module "floating-ips-control" {
+  source = "./terraform/openstack/floating-ip"
+  count = "${var.control_count}"
+  floating_pool = "${var.floating_ip_pool}"
+}
+
+module "floating-ips-worker" {
+  source = "./terraform/openstack/floating-ip"
+  count = "${var.worker_count}"
+  floating_pool = "${var.floating_ip_pool}"
+}
+
+module "floating-ips-edge" {
+  source = "./terraform/openstack/floating-ip"
+  count = "${var.edge_count}"
+  floating_pool = "${var.floating_ip_pool}"
+}
+
+#Create a network with an externally attached router
+module "network" {
+  source = "./terraform/openstack/network"
+  external_net_uuid = "${var.external_network_uuid}"
+  subnet_cidr = "${var.subnet_cidr}"
+  name= "${var.name}"
+}
+
+
+# Create instances for each of the roles
+module "instances-control" {
+  source = "./terraform/openstack/instance"
+  name = "${var.name}"
+  count = "${var.control_count}"
+  role = "control"
+  volume_size = "20"
+  network_uuid = "${module.network.network_uuid}"
+  floating_ips = "${module.floating-ips-control.ip_list}"
+  keypair_name = "${module.ssh-key.keypair_name}"
+  flavor_name = "${var.control_flavor_name}"
+  image_name = "${var.image_name_control}"
+}
+
+# moved edge creation to before worker
+module "instances-edge" {
+  source = "./terraform/openstack/instance"
+  name = "${var.name}"
+  count = "${var.edge_count}"
+  volume_size = "20"
+  count_format = "%02d"
+  role = "edge"
+  network_uuid = "${module.network.network_uuid}"
+  floating_ips = "${module.floating-ips-edge.ip_list}"
+  keypair_name = "${module.ssh-key.keypair_name}"
+  flavor_name = "${var.edge_flavor_name}"
+  image_name = "${var.image_name_edge}"
+}
+
+module "instances-worker" {
+  source = "./terraform/openstack/instance"
+  name = "${var.name}"
+  count = "${var.worker_count}"
+  volume_size = "20"
+  count_format = "%03d"
+  role = "worker"
+  network_uuid = "${module.network.network_uuid}"
+  floating_ips = "${module.floating-ips-worker.ip_list}"
+  keypair_name = "${module.ssh-key.keypair_name}"
+  flavor_name = "${var.worker_flavor_name}"
+  image_name = "${var.image_name_worker}"
+}
+
+#
+# Cloudflare DNS service
+#
+# The token can be set as environment var TF_VAR_token
+# export TF_VAR_token=blablatoken82827827
+# OR
+# in file
+#
+variable "token" {}
+provider "cloudflare" {
+  email = "anders.larsson@icm.uu.se"
+  token = "${var.token}"
+  #token = "${file("path_to_credentials_file.txt")}"
+}
+
+module "cloudflare" {
+  source = "./terraform/cloudflare"
+  control_count = "${var.control_count}"
+#  control_ips = "${module.control-nodes.gce_ips}" # gce version
+  control_ips = "${module.instances-control.ip_v4_list}"
+  domain = "uservice.se"
+  edge_count = "${var.edge_count}"
+#  edge_ips = "${module.edge-nodes.gce_ips}" # gce version
+ edge_ips = "${module.instances-edge.ip_v4_list}"
+# lb_ip = "${module.network-lb.public_ip}"
+# managed_zone = "phenomenal-cloud"
+  short_name = "${var.name}"
+  subdomain = ".${var.name}"
+  worker_count = "${var.worker_count}"
+#  worker_ips = "${module.worker-nodes.gce_ips}" # gce version
+  worker_ips = "${module.instances-worker.ip_v4_list}"
+}
+
+

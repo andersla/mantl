@@ -11,6 +11,7 @@
   tags:
     - dnsmasq
     - bootstrap
+    - packaging
 
 - name: collect nameservers
   sudo: yes

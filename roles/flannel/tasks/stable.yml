@@ -6,4 +6,5 @@
     state=present
   tags:
     - flannel
+    - packaging
 

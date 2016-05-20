@@ -7,6 +7,7 @@
   tags:
     - zookeeper
     - bootstrap
+    - packaging
 
 - name: install zookeeper scripts
   sudo: yes
@@ -67,6 +68,7 @@
     state: present
   tags:
     - zookeeper
+    - packaging
 
 - name: create missing 'conf' symlink
   sudo: yes
@@ -165,6 +167,7 @@
     state: present
   tags:
     - zookeeper
+    - packaging
 
 - include: collectd.yml
 

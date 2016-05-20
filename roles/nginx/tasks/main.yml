@@ -7,6 +7,7 @@
     mode: 0700
   tags:
     - nginx
+#   - packaging
 
 - name: deploy tls files
   sudo: yes
@@ -21,6 +22,7 @@
       dest: /etc/nginx/ssl/nginx.key
   tags:
     - nginx
+#   - packaging
 
 - name: encrypt admin password
   sudo: yes

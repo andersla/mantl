@@ -17,6 +17,7 @@
     mode: 0644
   tags:
     - common
+    - packaging
 
 - name: increase timeouts in YUM
   sudo: yes
@@ -26,12 +27,16 @@
       value: 60.0
     - option: retries
       value: 30
+  tags:
+    - packaging
 
 - name: enable EPEL repo
   sudo: yes
   yum:
     name: epel-release
     state: latest
+  tags:
+    - packaging
 
 - name: install system utilities
   sudo: yes
@@ -48,6 +53,7 @@
     - java-1.8.0-openjdk
   tags:
     - bootstrap
+    - packaging
 
 - name: disable firewalld
   sudo: yes
@@ -56,13 +62,15 @@
     enabled: false
     state: stopped
   register: command_result
-  failed_when: "command_result|failed and 'No such file or directory' not in command_result.msg"
+  failed_when: "command_result|failed and 'systemd could not find the requested service' not in command_result.msg"
 
 - name: install pip
   sudo: yes
   yum:
     name: python-pip
     state: latest
+  tags:
+    - packaging
 
 - name: update setuptools and pip
   sudo: yes
@@ -72,6 +80,8 @@
   with_items:
     - name: pip
     - name: setuptools
+  tags:
+    - packaging
 
 - name: disable requiretty in sudoers
   sudo: yes
@@ -80,6 +90,8 @@
     state: present
     regexp: ^.+requiretty$
     line: "# Defaults	requiretty"
+  tags:
+    - packaging
 
 - name: configure selinux
   sudo: yes
@@ -89,6 +101,7 @@
   tags:
     - security
     - bootstrap
+    - packaging
 
 - include: users.yml
 - include: ssl.yml

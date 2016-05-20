@@ -11,6 +11,16 @@
   tags:
     - consul
     - bootstrap
+    - packaging
+    
+# don't autostart consul after packaging 
+- name: disable consul when packaged in image
+  sudo: yes
+  service:
+    name: consul
+    enabled: no
+  tags:
+    - packaging
 
 - name: configure consul
   sudo: yes
@@ -57,6 +67,7 @@
     - restart consul
   tags:
     - consul
+#   - packaging
 
 - name: install scripts
   sudo: yes
@@ -70,6 +81,7 @@
     - check-service-active
   tags:
     - consul
+#   - packaging
 
 - name: enable consul
   sudo: yes

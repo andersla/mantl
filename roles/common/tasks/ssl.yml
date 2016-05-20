@@ -7,3 +7,6 @@
     owner: root
   notify:
     - update-ca-trust
+#  tags:
+#    - packaging
+    

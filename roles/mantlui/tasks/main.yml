@@ -5,6 +5,7 @@
   tags:
     - mantlui
     - bootstrap
+    - packaging
 
 - name: configure nginx-mantlui
   sudo: yes
