@@ -126,7 +126,7 @@
     state: directory
   tags:
     - docker
-    - packages
+    - packaging
 
 - name: create docker entry for syslogd
   sudo: yes
@@ -140,7 +140,7 @@
     - restart rsyslog
   tags:
     - docker
-    - packages
+    - packaging
 
 
 - name: configure docker consul dns
@@ -163,7 +163,7 @@
     state: directory
   tags:
     - docker
-    - packages
+    - packaging
 
 - name: setup private docker registry credentials
   sudo: yes

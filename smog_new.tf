@@ -2,7 +2,7 @@ variable subnet_cidr { default = "10.0.0.0/24" }
 #variable public_key { default = "~/.ssh/id_rsa.pub" }
 variable public_key { default = "/home/anders/projekt/phenomenal/ssh/cloud.key.pub" }
 
-variable name { default = "datacenter2" } # cluster name
+variable name { default = "datacenter1" } # cluster name
 variable control_count { default = "1"} # number of control nodes
 variable worker_count { default = "1"}  # number of worker nodes
 variable edge_count { default = "1"}    # number of edge nodes
@@ -14,6 +14,7 @@ variable floating_ip_pool { default = "public" }
 
 # Run 'nova image-list' to get your image name
 #variable image_name  { default = "CentOS7" }
+#variable image_name  { default = "phenomenal-mantl-upgraded" }
 variable image_name  { default = "phenomenal_installed_packaged" }
 
 #  Openstack flavors control the size of the instance, i.e. m1.xlarge.

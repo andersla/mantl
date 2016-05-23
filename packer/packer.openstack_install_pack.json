@@ -8,7 +8,7 @@
 	     "name": "all",
          "type": "openstack",
 	     "image_name": "phenomenal_installed_packaged",
-	     "source_image_name": "phenomenal-mantl-openstack2",
+	     "source_image_name": "phenomenal-mantl-upgraded",
 	     "flavor": "m1.small",
 	     "ssh_username": "centos",
 	     "ssh_pty": true,
@@ -52,10 +52,6 @@
             ],
             "extra_arguments": [ "--tags", "packaging,always_tag", "--extra-vars=\"provider=openstack\"" ],
             "inventory_groups": "role=edge,role=control,role=worker"
-        },
-        {
-            "type": "shell",
-            "inline": ["sync", "sudo -S /sbin/shutdown -h now", "sleep 60"]
         }
     ]
     

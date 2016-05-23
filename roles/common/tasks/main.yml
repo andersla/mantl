@@ -7,6 +7,8 @@
     dest: /etc/localtime
     state: link
     force: yes
+  tags:
+    - always_tag
 
 # add hosts to /etc/hosts
 - name: configure hosts file
@@ -17,7 +19,6 @@
     mode: 0644
   tags:
     - common
-    - packaging
 
 - name: increase timeouts in YUM
   sudo: yes
@@ -63,6 +64,8 @@
     state: stopped
   register: command_result
   failed_when: "command_result|failed and 'systemd could not find the requested service' not in command_result.msg"
+  tags:
+    - always_tag
 
 - name: install pip
   sudo: yes

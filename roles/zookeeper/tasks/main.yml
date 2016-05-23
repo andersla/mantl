@@ -70,6 +70,16 @@
     - zookeeper
     - packaging
 
+# Dont autostart zookeeper on packaging
+- name: register zookeeper service
+  sudo: yes
+  service:
+    enabled: no
+    name: "{{ zookeeper_service }}"
+  tags:
+    - zookeeper
+    - packaging
+
 - name: create missing 'conf' symlink
   sudo: yes
   file:
