@@ -1,0 +1,32 @@
+{
+  "variables": {
+    "blabla": "",
+    "blabla2": ""
+  },
+  "builders": [{
+         "type": "googlecompute",
+         "account_file": "/home/anders/projekt/phenomenal/google_cloud/AndersPhenoPack-84fa727872ae.json",
+         "project_id": "andersphenopack",
+         "source_image": "centos-7-v20160119",
+         "zone": "europe-west1-b",
+         "ssh_username": "centos",
+         "ssh_pty" : "true",
+	     "image_name": "phenomenal-mantl-centos7"
+
+    }],
+  "provisioners": [
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+            "scripts": [
+                "{{pwd}}/packer/scripts/ansible.sh"
+            ]
+        },
+	    {
+	        "type": "ansible-local",
+	        "playbook_dir": "{{pwd}}/playbooks",
+	        "playbook_file": "{{pwd}}/playbooks/upgrade-packages.yml"
+	    }
+    ]
+    
+}
