@@ -8,7 +8,30 @@
     - marathon
     - bootstrap
     - packaging
+    
+# disable marathon on packer round
+- name: packaging disable marathon service
+  sudo: yes
+  service:
+    name: marathon
+    enabled: no
+  tags:
+    - marathon
+    - packaging
+    
+# enable marathon service
+- name: enable marathon service
+  sudo: yes
+  service:
+    name: marathon
+    enabled: yes
+    state: started
+  tags:
+    - marathon
+    - packaging
+    
 
+    
 - name: create consul acl for marathon
   sudo: yes
   run_once: yes

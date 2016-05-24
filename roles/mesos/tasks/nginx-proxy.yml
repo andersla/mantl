@@ -19,6 +19,7 @@
   tags:
     - marathon
     - bootstrap
+    - packaging
 
 - name: configure nginx-mesos-leader
   sudo: yes

@@ -71,7 +71,7 @@
     - packaging
 
 # Dont autostart zookeeper on packaging
-- name: register zookeeper service
+- name: packaging disable zookeeper service
   sudo: yes
   service:
     enabled: no

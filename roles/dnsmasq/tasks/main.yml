@@ -13,6 +13,15 @@
     - bootstrap
     - packaging
 
+- name: disable dnsmasq when packaging
+  sudo: yes
+  service:
+    name: dnsmasq
+    enabled: no
+  tags:
+    - dnsmasq
+    - packaging
+
 - name: collect nameservers
   sudo: yes
   shell: "cat /etc/resolv.conf | grep -i '^nameserver' | cut -d ' ' -f2"

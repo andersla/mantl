@@ -10,7 +10,7 @@
     - packaging
 
 # disable service when packaging
-- name: enable vault
+- name: disable vault
   sudo: yes
   service:
     name: vault
