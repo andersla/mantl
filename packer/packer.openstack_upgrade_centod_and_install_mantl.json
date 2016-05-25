@@ -8,7 +8,7 @@
 	     "name": "all",
          "type": "openstack",
 	     "image_name": "phenomenal_installed_packaged",
-	     "source_image_name": "phenomenal-mantl-upgraded",
+	     "source_image_name": "CentOS7",
 	     "flavor": "m1.small",
 	     "ssh_username": "centos",
 	     "ssh_pty": true,
@@ -16,13 +16,35 @@
 	     "networks": ["1469a145-41b8-4d4b-b79a-408145c2f196"],
 	     "availability_zone": "nova"
 	 }],
-     "provisioners": [
+     "provisioners": "provisioners": [
+  
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+            "scripts": [
+                "{{pwd}}/packer/scripts/ansible.sh"
+            ]
+        },
+		{
+	        "type": "ansible-local",
+	        "playbook_dir": "{{pwd}}/playbooks",
+	        "playbook_file": "{{pwd}}/playbooks/upgrade-packages.yml"
+	    },    
+	    { 
+	        "type": "shell",
+		    "inline": ["sudo reboot -h now"]
+		},
+		{
+		    "type": "shell",
+            "pause_before": "10s",
+            "start_retry_timeout": "15m",
+		    "inline": ["echo $(date) > /tmp/rebooted"]
+	    },
 		{
             "type": "shell",
             "inline": ["mkdir /tmp/packer-provisioner-ansible-local/library"]
         },
         {
-			"only": ["all"],
             "type": "ansible-local",
             "playbook_dir": "{{pwd}}/playbooks",
             "playbook_file": "{{pwd}}/phenomenal.yml",
@@ -50,7 +72,7 @@
                 "{{pwd}}/roles/vault",
                 "{{pwd}}/roles/zookeeper"
             ],
-            "extra_arguments": [ "--tags", "packaging,always_tag", "--extra-vars=\"provider=openstack\"" ],
+            "extra_arguments": [ "--tags", "packaging,always_tag", "--extra-vars=\"provider=google\"" ],
             "inventory_groups": "role=edge,role=control,role=worker"
         }
     ]

@@ -5,48 +5,24 @@
   },
   "builders": [
      {
-	     "name": "edge",
+	     "name": "all",
          "type": "openstack",
-	     "image_name": "phenomenal_mantl_openstack_ansible_packaged_edge",
-	     "source_image_name": "phenomenal-mantl-openstack",
-	     "flavor": "m1.medium",
+	     "image_name": "phenomenal_installed_packaged",
+	     "source_image_name": "phenomenal-mantl-upgraded",
+	     "flavor": "m1.small",
 	     "ssh_username": "centos",
 	     "ssh_pty": true,
 	     "floating_ip_pool": "public",
 	     "networks": ["1469a145-41b8-4d4b-b79a-408145c2f196"],
 	     "availability_zone": "nova"
-	 },
-	 {
-	     "name": "worker",
-         "type": "openstack",
-	     "image_name": "phenomenal_mantl_openstack_ansible_packaged_worker",
-	     "source_image_name": "phenomenal-mantl-openstack",
-	     "flavor": "m1.medium",
-	     "ssh_username": "centos",
-	     "ssh_pty": true,
-	     "floating_ip_pool": "public",
-	     "networks": ["1469a145-41b8-4d4b-b79a-408145c2f196"],
-	     "availability_zone": "nova"
-     },
-	 {
-	     "name": "control",
-         "type": "openstack",
-	     "image_name": "phenomenal_mantl_openstack_ansible_packaged_control",
-	     "source_image_name": "phenomenal-mantl-openstack",
-	     "flavor": "m1.medium",
-	     "ssh_username": "centos",
-	     "ssh_pty": true,
-	     "floating_ip_pool": "public",
-	     "networks": ["1469a145-41b8-4d4b-b79a-408145c2f196"],
-	     "availability_zone": "nova"
-     }],
+	 }],
      "provisioners": [
 		{
             "type": "shell",
             "inline": ["mkdir /tmp/packer-provisioner-ansible-local/library"]
         },
         {
-			"only": ["edge"],
+			"only": ["all"],
             "type": "ansible-local",
             "playbook_dir": "{{pwd}}/playbooks",
             "playbook_file": "{{pwd}}/phenomenal.yml",
@@ -57,7 +33,6 @@
                 "{{pwd}}/roles/common",
                 "{{pwd}}/roles/consul",
                 "{{pwd}}/roles/consul-template",
-
                 "{{pwd}}/roles/dnsmasq",
                 "{{pwd}}/roles/docker",
                 "{{pwd}}/roles/etcd",
@@ -75,74 +50,8 @@
                 "{{pwd}}/roles/vault",
                 "{{pwd}}/roles/zookeeper"
             ],
-            "extra_arguments": [ "--tags", "packaging", "--extra-vars=\"provider=openstack\"" ],
-            "inventory_groups": "role=edge"
-        },
-        {
-			"only": ["worker"],
-            "type": "ansible-local",
-            "playbook_dir": "{{pwd}}/playbooks",
-            "playbook_file": "{{pwd}}/phenomenal.yml",
-            "role_paths": [
-                "{{pwd}}/roles/calico",
-                "{{pwd}}/roles/chronos",
-                "{{pwd}}/roles/collectd",
-                "{{pwd}}/roles/common",
-                "{{pwd}}/roles/consul",
-                "{{pwd}}/roles/consul-template",
-
-                "{{pwd}}/roles/dnsmasq",
-                "{{pwd}}/roles/docker",
-                "{{pwd}}/roles/etcd",
-                "{{pwd}}/roles/glusterfs",
-                "{{pwd}}/roles/handlers",
-                "{{pwd}}/roles/haproxy",
-                "{{pwd}}/roles/logrotate",
-                "{{pwd}}/roles/logstash",
-                "{{pwd}}/roles/lvm",
-                "{{pwd}}/roles/mantlui",
-                "{{pwd}}/roles/marathon",
-                "{{pwd}}/roles/mesos",
-                "{{pwd}}/roles/nginx",
-                "{{pwd}}/roles/traefik",
-                "{{pwd}}/roles/vault",
-                "{{pwd}}/roles/zookeeper"
-            ],
-            "extra_arguments": [ "--tags", "packaging",  "--extra-vars=\"provider=openstack\"" ],
-            "inventory_groups": "role=worker"
-        },
-        {
-			"only": ["control"],
-            "type": "ansible-local",
-            "playbook_dir": "{{pwd}}/playbooks",
-            "playbook_file": "{{pwd}}/phenomenal.yml",
-            "role_paths": [
-                "{{pwd}}/roles/calico",
-                "{{pwd}}/roles/chronos",
-                "{{pwd}}/roles/collectd",
-                "{{pwd}}/roles/common",
-                "{{pwd}}/roles/consul",
-                "{{pwd}}/roles/consul-template",
-
-                "{{pwd}}/roles/dnsmasq",
-                "{{pwd}}/roles/docker",
-                "{{pwd}}/roles/etcd",
-                "{{pwd}}/roles/glusterfs",
-                "{{pwd}}/roles/handlers",
-                "{{pwd}}/roles/haproxy",
-                "{{pwd}}/roles/logrotate",
-                "{{pwd}}/roles/logstash",
-                "{{pwd}}/roles/lvm",
-                "{{pwd}}/roles/mantlui",
-                "{{pwd}}/roles/marathon",
-                "{{pwd}}/roles/mesos",
-                "{{pwd}}/roles/nginx",
-                "{{pwd}}/roles/traefik",
-                "{{pwd}}/roles/vault",
-                "{{pwd}}/roles/zookeeper"
-            ],
-            "extra_arguments": [ "--tags", "packaging",  "--extra-vars=\"provider=openstack\"" ],
-            "inventory_groups": "role=control"
+            "extra_arguments": [ "--tags", "packaging,always_tag", "--extra-vars=\"provider=openstack\"" ],
+            "inventory_groups": "role=edge,role=control,role=worker"
         }
     ]
     
