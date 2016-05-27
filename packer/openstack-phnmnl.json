@@ -67,7 +67,8 @@
         "{{pwd}}/roles/nginx",
         "{{pwd}}/roles/traefik",
         "{{pwd}}/roles/vault",
-        "{{pwd}}/roles/zookeeper"
+        "{{pwd}}/roles/zookeeper",
+        "{{pwd}}/roles/handlers"
       ],
       "extra_arguments": [ "--tags", "packaging,always_tag", "--extra-vars=\"provider=openstack\"" ],
       "inventory_groups": "role=edge,role=control,role=worker"
