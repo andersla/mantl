@@ -23,7 +23,8 @@
 	"provisioners": [
     {
       "type": "shell",
-      "scripts": ["sudo {{pwd}}/packer/scripts/ansible.sh"]
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": ["{{pwd}}/packer/scripts/ansible.sh"]
     },
 		{
 	    "type": "ansible-local",
