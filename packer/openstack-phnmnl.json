@@ -5,7 +5,7 @@
 		"network": "{{env `PACKER_NETWORK`}}",
     "flavour": "{{env `PACKER_FLAVOUR`}}",
     "availability_zone": "{{env `PACKER_AVAILABILITY_ZONE`}}",
-    "floating_ip_pool": "{{env `PACKER_FLOATING_IP_POOL`}}",
+    "floating_ip_pool": "{{env `PACKER_FLOATING_IP_POOL`}}"
  	},
 	"builders": [
     {
