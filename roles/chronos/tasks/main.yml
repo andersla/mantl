@@ -6,6 +6,7 @@
     state: present
   tags:
     - chronos
+    - packaging
 
 - name: wait for zookeeper service to be registered
   wait_for:

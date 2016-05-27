@@ -7,6 +7,17 @@
   tags:
     - vault
     - bootstrap
+    - packaging
+
+# disable service when packaging
+- name: disable vault
+  sudo: yes
+  service:
+    name: vault
+    enabled: no
+  tags:
+    - vault
+    - packaging
 
 - name: configure vault
   sudo: yes

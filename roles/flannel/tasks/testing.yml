@@ -7,4 +7,5 @@
     enablerepo=virt7-docker-common-candidate
   tags:
     - flannel
+    - packaging
 

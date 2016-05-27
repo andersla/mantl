@@ -7,6 +7,7 @@
   tags:
     - zookeeper
     - bootstrap
+    - packaging
 
 - name: install zookeeper scripts
   sudo: yes
@@ -67,6 +68,17 @@
     state: present
   tags:
     - zookeeper
+    - packaging
+
+# Dont autostart zookeeper on packaging
+- name: packaging disable zookeeper service
+  sudo: yes
+  service:
+    enabled: no
+    name: "{{ zookeeper_service }}"
+  tags:
+    - zookeeper
+    - packaging
 
 - name: create missing 'conf' symlink
   sudo: yes
@@ -165,6 +177,7 @@
     state: present
   tags:
     - zookeeper
+    - packaging
 
 - include: collectd.yml
 

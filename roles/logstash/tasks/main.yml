@@ -7,6 +7,7 @@
     mode: 0755
   tags:
     - logstash
+    - packaging
 
 - name: configure logstash
   sudo: yes
@@ -24,6 +25,7 @@
   tags:
     - logstash
     - bootstrap
+    - packaging
 
 - name: generate systemd service file
   sudo: yes

@@ -7,6 +7,7 @@
     sha256sum: "{{ glusterfs_repo_sha256sum }}"
   tags:
     - glusterfs
+    - packaging
 
 - include: server.yml
   when: glusterfs_mode == "server"

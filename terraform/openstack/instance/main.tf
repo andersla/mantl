@@ -17,17 +17,17 @@ variable volume_size { default = 20 }
 variable volume_device { default = "/dev/vdb" }
 variable user_data { default = "" }
 
-resource "openstack_blockstorage_volume_v1" "blockstorage" {
-  name = "${var.name}-${format(var.count_format, var.count_offset+count.index+1) }"
-  description = "${var.name}-${format(var.count_format, var.count_offset+count.index+1) }"
-  size = "${var.volume_size}"
-  metadata = {
-    attached_mode = "${var.blockstorage_metadata_attached_mode}"
-    readonly = "${var.blockstorage_metadata_readonly}"
-    usage = "${var.name}-${var.role}-blockstorage"
-  }
-  count = "${var.count}"
-}
+#resource "openstack_blockstorage_volume_v1" "blockstorage" {
+#  name = "${var.name}-${format(var.count_format, var.count_offset+count.index+1) }"
+#  description = "${var.name}-${format(var.count_format, var.count_offset+count.index+1) }"
+#  size = "${var.volume_size}"
+#  metadata = {
+#    attached_mode = "${var.blockstorage_metadata_attached_mode}"
+#    readonly = "${var.blockstorage_metadata_readonly}"
+#    usage = "${var.name}-${var.role}-blockstorage"
+#  }
+#  count = "${var.count}"
+#}
 
 resource "openstack_compute_instance_v2" "instance" {
   floating_ip = "${ element(split(",", var.floating_ips), count.index) }"
@@ -41,10 +41,10 @@ resource "openstack_compute_instance_v2" "instance" {
     uuid = "${var.network_uuid}" 
   }
 
-  volume = {
-    volume_id = "${element(openstack_blockstorage_volume_v1.blockstorage.*.id, count.index)}"
-    device = "${var.volume_device}"
-  }
+#  volume = {
+#    volume_id = "${element(openstack_blockstorage_volume_v1.blockstorage.*.id, count.index)}"
+#    device = "${var.volume_device}"
+#  }
 
   metadata = {
     dc = "${var.datacenter}"

@@ -6,6 +6,7 @@
     state: present
   tags:
     - etcd
+    - packaging
 
 - name: generate systemd environment file
   sudo: yes

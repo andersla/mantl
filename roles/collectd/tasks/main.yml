@@ -10,6 +10,7 @@
   tags:
     - collectd
     - bootstrap
+    - packaging
 
 - name: create collectd plugin directory
   sudo: yes

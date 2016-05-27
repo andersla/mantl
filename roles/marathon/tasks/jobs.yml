@@ -9,6 +9,7 @@
   tags:
     - marathon
     - bootstrap
+    - packaging
 
 - name: create json files for jobs
   sudo: yes

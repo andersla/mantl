@@ -38,6 +38,7 @@
   tags:
     - calico
     - bootstrap
+    - packaging
 
 #- name: download calicoctl bash completion script
 #  sudo: yes

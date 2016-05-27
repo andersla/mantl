@@ -9,6 +9,7 @@
     - docker
     - bootstrap
     - lvm
+    - packaging
 
 - name: update lvg ansible module
   connection: local
@@ -18,6 +19,7 @@
     dest: "{{ playbook_dir }}/library/lvg.py"
   tags:
     - docker
+    - always_tag
 
 - name: install LVM tools
   sudo: yes
@@ -28,6 +30,7 @@
     - docker
     - bootstrap
     - lvm
+    - packaging
 
 - name: list volume groups
   sudo: yes
@@ -36,6 +39,7 @@
   tags:
     - docker
     - lvm
+    - packaging
 
 - name: Create volume group
   sudo: yes
@@ -46,6 +50,7 @@
   tags:
     - docker
     - lvm
+    - packaging
 
 - name: enable lvmetad service
   sudo: yes
@@ -56,8 +61,11 @@
   tags:
     - docker
     - lvm
+    - packaging
 
 - name: save volume group name as fact
   set_fact:  volume_group_name="{{ lvm_volume_group_name }}"
   tags:
     - lvm
+    - always_tag
+
