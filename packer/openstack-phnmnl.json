@@ -4,7 +4,8 @@
 		"source_image_name": "{{env `PACKER_SOURCE_IMAGE_NAME`}}",
 		"network": "{{env `PACKER_NETWORK`}}",
     "flavour": "{{env `PACKER_FLAVOUR`}}",
-    "availability_zone": "{{env `PACKER_AVAILABILITY_ZONE`}}"
+    "availability_zone": "{{env `PACKER_AVAILABILITY_ZONE`}}",
+    "floating_ip_pool": "{{env `PACKER_FLOATING_IP_POOL`}}",
  	},
 	"builders": [
     {
@@ -14,7 +15,7 @@
       "flavor": "{{user `flavour`}}",
       "ssh_username": "centos",
       "ssh_pty": true,
-      "floating_ip_pool": "public",
+      "floating_ip_pool": "{{user `floating_ip_pool`}}",
   		"networks": ["{{user `network`}}"],
   		"availability_zone": "{{user `availability_zone`}}"
     }
