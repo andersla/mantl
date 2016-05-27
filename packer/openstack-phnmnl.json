@@ -2,14 +2,15 @@
 	"variables": {
 		"image_name": "{{env `PACKER_IMAGE_NAME`}}",
 		"source_image_name": "{{env `PACKER_SOURCE_IMAGE_NAME`}}",
-		"network": "{{env `PACKER_NETWORK`}}"
+		"network": "{{env `PACKER_NETWORK`}}",
+    "flavour": "{{env `PACKER_FLAVOUR`}}"
  	},
 	"builders": [
     {
       "type": "openstack",
       "image_name": "{{user `image_name`}}",
       "source_image_name": "{{user `source_image_name`}}",
-      "flavor": "m1.small",
+      "flavor": "{{user `flavour`}}",
       "ssh_username": "centos",
       "ssh_pty": true,
       "floating_ip_pool": "public",
