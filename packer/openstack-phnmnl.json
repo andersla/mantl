@@ -3,7 +3,8 @@
 		"image_name": "{{env `PACKER_IMAGE_NAME`}}",
 		"source_image_name": "{{env `PACKER_SOURCE_IMAGE_NAME`}}",
 		"network": "{{env `PACKER_NETWORK`}}",
-    "flavour": "{{env `PACKER_FLAVOUR`}}"
+    "flavour": "{{env `PACKER_FLAVOUR`}}",
+    "availability_zone": "{{env `PACKER_AVAILABILITY_ZONE`}}"
  	},
 	"builders": [
     {
@@ -15,7 +16,7 @@
       "ssh_pty": true,
       "floating_ip_pool": "public",
   		"networks": ["{{user `network`}}"],
-  		"availability_zone": "nova"
+  		"availability_zone": "{{user `availability_zone`}}"
     }
   ],
 	"provisioners": [
