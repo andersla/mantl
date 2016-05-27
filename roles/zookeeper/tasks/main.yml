@@ -21,6 +21,7 @@
     - zookeeper-update-mantl-0.5-0.6.sh
   tags:
     - zookeeper
+    - bootstrap
 
 - name: create zookeeper user
   sudo: yes
@@ -67,6 +68,7 @@
     state: present
   tags:
     - zookeeper
+    - bootstrap
 
 - name: create missing 'conf' symlink
   sudo: yes

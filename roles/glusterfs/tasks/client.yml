@@ -6,6 +6,7 @@
     state: present
   tags:
     - glusterfs
+    - bootstrap
 
 - name: install mount helper unit
   sudo: yes
@@ -22,6 +23,7 @@
       mode: u=rw,g=r,o=r
   tags:
     - glusterfs
+    - bootstrap
 
 - name: create mount points for volumes
   sudo: yes

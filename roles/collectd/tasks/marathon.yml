@@ -6,7 +6,7 @@
   tags:
     - marathon
     - collectd
-    
+
 - name: install collectd marathon plugin
   sudo: yes
   copy:
@@ -17,6 +17,7 @@
   tags:
     - marathon
     - collectd
+    - bootstrap
 
 - name: configure collectd marathon plugin
   sudo: yes

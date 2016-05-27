@@ -32,6 +32,7 @@
   when: chronos_service_count.stdout|int == 0
   tags:
     - chronos
+    - bootstrap
 
 - name: remove chronos application json
   sudo: yes

@@ -10,6 +10,7 @@
   tags:
     - docker
     - lvm
+    - bootstrap
 
 - name: install partitioner service
   sudo: yes
@@ -21,6 +22,7 @@
   tags:
     - docker
     - lvm
+    - bootstrap
 
 - name: enable partitioner service
   sudo: yes

@@ -51,6 +51,7 @@
     - check-service-active
   tags:
     - consul
+    - bootstrap
 
 - name: enable consul
   sudo: yes

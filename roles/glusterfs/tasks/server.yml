@@ -6,6 +6,7 @@
     state: present
   tags:
     - glusterfs
+    - bootstrap
 
 - name: install glusterd.service
   sudo: yes
@@ -15,6 +16,7 @@
     mode: 0644
   tags:
     - glusterfs
+    - bootstrap
 
 - name: enable services
   sudo: yes

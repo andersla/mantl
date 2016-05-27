@@ -17,6 +17,7 @@
   tags:
     - zookeeper
     - collectd
+    - bootstrap
 
 - name: configure collectd zookeeper plugin
   sudo: yes

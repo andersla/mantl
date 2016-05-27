@@ -29,8 +29,8 @@
   when: >
     provider != "bare-metal" and
     provider != "virtualbox" and
-    provider != "packer" and 
-    provider != "vsphere" 
+    provider != "packer" and
+    provider != "vsphere"
   tags:
     - common
 
@@ -112,6 +112,8 @@
   yum:
     name: python-pip
     state: latest
+  tags:
+    - bootstrap
 
 - name: update setuptools and pip
   sudo: yes
@@ -121,6 +123,8 @@
   with_items:
     - name: pip
     - name: setuptools
+  tags:
+    - bootstrap
 
 - name: disable requiretty in sudoers
   sudo: yes
