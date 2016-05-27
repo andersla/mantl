@@ -44,7 +44,7 @@
     {
     	"type": "ansible-local",
     	"playbook_dir": "{{pwd}}/playbooks",
-    	"playbook_file": "{{pwd}}/phenomenal.yml",
+    	"playbook_file": "{{pwd}}/phnmnl-packaging.yml",
     	"role_paths": [
         "{{pwd}}/roles/chronos",
         "{{pwd}}/roles/collectd",
