@@ -8,8 +8,8 @@ variable edge_count { default = "1"}    # load balancer nodes
 
 # Run 'nova network-list' to get these names and values
 # Floating ips are optional
-variable external_network_uuid { default = "d9384930-baa5-422b-8657-1d42fb54f89c" }
 variable floating_ip_pool { default = "net_external" }
+variable network_uuid { default = "00bfaadf-9713-4bb6-adb3-457cd9e9240b" }
 
 # Run 'nova image-list' to get your image name
 variable image_name  { default = "PhenoMeNal_mantl-1.0.2" }
@@ -27,13 +27,6 @@ module "ssh-key" {
   keypair_name = "mantl-key"
 }
 
-#Create a network with an externally attached router
-module "network" {
-  source = "./terraform/openstack/network"
-  external_net_uuid = "${var.external_network_uuid}"
-  subnet_cidr = "${var.subnet_cidr}"
-}
-
 # Create floating IPs for each of the roles
 # These are not required if your network is exposed to the internet
 # or you don't want floating ips for the instances.
@@ -42,12 +35,6 @@ module "floating-ips-control" {
   count = "${var.control_count}"
   floating_pool = "${var.floating_ip_pool}"
 }
-
-#module "floating-ips-worker" {
-#  source = "./terraform/openstack/floating-ip"
-#  count = "${var.worker_count}"
-#  floating_pool = "${var.floating_ip_pool}"
-#}
 
 module "floating-ips-edge" {
   source = "./terraform/openstack/floating-ip"
@@ -62,7 +49,7 @@ module "instances-control" {
   count = "${var.control_count}"
   role = "control"
   volume_size = "50"
-  network_uuid = "${module.network.network_uuid}"
+  network_uuid = "${var.network_uuid}"
   floating_ips = "${module.floating-ips-control.ip_list}"
   keypair_name = "${module.ssh-key.keypair_name}"
   flavor_name = "${var.control_flavor_name}"
@@ -76,8 +63,7 @@ module "instances-worker" {
   volume_size = "100"
   count_format = "%03d"
   role = "worker"
-  network_uuid = "${module.network.network_uuid}"
-#  floating_ips = "${module.floating-ips-worker.ip_list}"
+  network_uuid = "${var.network_uuid}"
   keypair_name = "${module.ssh-key.keypair_name}"
   flavor_name = "${var.worker_flavor_name}"
   image_name = "${var.image_name}"
@@ -90,7 +76,7 @@ module "instances-edge" {
   volume_size = "20"
   count_format = "%02d"
   role = "edge"
-  network_uuid = "${module.network.network_uuid}"
+  network_uuid = "${var.network_uuid}"
   floating_ips = "${module.floating-ips-edge.ip_list}"
   keypair_name = "${module.ssh-key.keypair_name}"
   flavor_name = "${var.edge_flavor_name}"
@@ -108,5 +94,5 @@ module "cloudflare" {
   short_name = "${var.name}"
   subdomain = ".${var.name}"
   worker_count = "${var.worker_count}"
-#  worker_ips = "${module.instances-worker.ip_v4_list}"
+  worker_ips = "${module.instances-worker.ip_v4_list}"
 }
