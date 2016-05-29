@@ -15,7 +15,7 @@
     # Consul ACLs. If you only have one datacenter, set it to that or remove
     # this variable.
     # consul_acl_datacenter: your_primary_datacenter
-
+    docker_lvm_backed: false
     consul_servers_group: role=control
   roles:
     - common
