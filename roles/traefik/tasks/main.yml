@@ -19,6 +19,24 @@
     - traefik
     - bootstrap
     - packaging
+    
+- name: disable traefik when packaging
+  sudo: yes
+  service:
+    name: traefik
+    enabled: no
+  tags:
+    - traefik
+    - packaging
+    
+- name: enable traefik
+  sudo: yes
+  service:
+    name: traefik
+    enabled: yes
+    state: started
+  tags:
+    - traefik
 
 - name: make certificate directory
   sudo: yes
