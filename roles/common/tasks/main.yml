@@ -19,17 +19,20 @@
     mode: 0644
   tags:
     - common
-
-- name: increase timeouts in YUM
-  sudo: yes
-  shell: "yum-config-manager --save --setopt {{ item.option }}={{ item.value }}"
-  with_items:
-    - option: timeout
-      value: 60.0
-    - option: retries
-      value: 30
-  tags:
-    - packaging
+#
+#  not working with gce and is not really needed
+#  alternative is to ake sur package yum-utils is installed
+#
+#- name: increase timeouts in YUM
+#  sudo: yes
+#  shell: "yum-config-manager --save --setopt {{ item.option }}={{ item.value }}"
+#  with_items:
+#    - option: timeout
+#      value: 60.0
+#    - option: retries
+#      value: 30
+#  tags:
+#    - packaging
 
 - name: enable EPEL repo
   sudo: yes
