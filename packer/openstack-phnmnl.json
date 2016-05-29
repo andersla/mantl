@@ -1,11 +1,11 @@
 {
-	"variables": {
-		"image_name": "{{env `PACKER_IMAGE_NAME`}}",
-		"source_image_name": "{{env `PACKER_SOURCE_IMAGE_NAME`}}",
-		"network": "{{env `PACKER_NETWORK`}}",
-    "flavour": "{{env `PACKER_FLAVOUR`}}",
-    "availability_zone": "{{env `PACKER_AVAILABILITY_ZONE`}}",
-    "floating_ip_pool": "{{env `PACKER_FLOATING_IP_POOL`}}"
+    "variables":
+    {
+      "image_name": "{{env `PACKER_IMAGE_NAME`}}",
+      "source_image_name": "{{env `PACKER_SOURCE_IMAGE_NAME`}}",
+      "network": "{{env `PACKER_NETWORK`}}",
+      "flavour": "{{env `PACKER_FLAVOUR`}}",
+      "floating_ip_pool": "{{env `PACKER_FLOATING_IP_POOL`}}"
  	},
 	"builders": [
     {
@@ -16,40 +16,40 @@
       "ssh_username": "centos",
       "ssh_pty": true,
       "floating_ip_pool": "{{user `floating_ip_pool`}}",
-  		"networks": ["{{user `network`}}"],
-  		"availability_zone": "{{user `availability_zone`}}"
+      "networks": ["{{user `network`}}"],
+      "availability_zone": "{{user `availability_zone`}}"
     }
-  ],
+    ],
 	"provisioners": [
     {
       "type": "shell",
       "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": ["{{pwd}}/packer/scripts/ansible.sh"]
     },
-		{
-	    "type": "ansible-local",
-	    "playbook_dir": "{{pwd}}/playbooks",
-	    "playbook_file": "{{pwd}}/playbooks/upgrade-packages.yml"
-	  },
-	  {
-	    "type": "shell",
-		  "inline": ["sudo reboot -h now"]
-		},
-		{
+	{
+	  "type": "ansible-local",
+	  "playbook_dir": "{{pwd}}/playbooks",
+	  "playbook_file": "{{pwd}}/playbooks/upgrade-packages.yml"
+	},
+	{
+	  "type": "shell",
+	  "inline": ["sudo reboot -h now"]
+    },
+    {
       "type": "shell",
       "pause_before": "10s",
       "start_retry_timeout": "15m",
-		  "inline": ["echo $(date) > /tmp/rebooted"]
-	  },
-		{
-    	"type": "shell",
-    	"inline": ["mkdir /tmp/packer-provisioner-ansible-local/library"]
+      "inline": ["echo $(date) > /tmp/rebooted"]
+	},
+    {
+      "type": "shell",
+      "inline": ["mkdir /tmp/packer-provisioner-ansible-local/library"]
     },
     {
-    	"type": "ansible-local",
-    	"playbook_dir": "{{pwd}}/playbooks",
-    	"playbook_file": "{{pwd}}/phnmnl-packaging.yml",
-    	"role_paths": [
+      "type": "ansible-local",
+      "playbook_dir": "{{pwd}}/playbooks",
+      "playbook_file": "{{pwd}}/phnmnl-packaging.yml",
+      "role_paths": [
         "{{pwd}}/roles/chronos",
         "{{pwd}}/roles/collectd",
         "{{pwd}}/roles/common",
