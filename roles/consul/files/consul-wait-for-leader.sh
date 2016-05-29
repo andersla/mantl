@@ -6,7 +6,7 @@ if [ -n "${token}" ]; then
   ccargs="--token=${token}"
 fi
 
-max_wait=30
+max_wait=120
 
 while :; do
   if [[ $(consul-cli status-leader ${ccargs}) =~ [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*:[0-9]* ]]; then
@@ -14,7 +14,7 @@ while :; do
   fi
 
   if [ $SECONDS -gt $max_wait ]; then
-    echo "No Consul leader elected in 30 seconds"
+    echo "No Consul leader elected in $max_wait seconds"
     exit 1
   fi
 
