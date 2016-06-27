@@ -11,6 +11,7 @@
     - consul
     - distributive
     - logstash
+    - packaging
 
 - name: create symlink to distributive logstash checklist
   sudo: yes
@@ -22,6 +23,7 @@
     - consul
     - distributive
     - logstash
+    - packaging
 
 - name: register distributive tests with consul
   sudo: yes
@@ -34,3 +36,4 @@
     - consul
     - distributive
     - logstash
+    - packaging

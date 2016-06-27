@@ -35,14 +35,14 @@ resource "google_compute_instance" "instance" {
     auto_delete = true
   }
 
-# disk {
-#   disk = "${element(google_compute_disk.disk.*.name, count.index)}"
-#   auto_delete = false
-#
-#   # make disk available as "/dev/disk/by-id/google-lvm"
-#   # NOTE: "google-" prefix is auto added
-#   device_name = "lvm"
-# }
+ disk {
+   disk = "${element(google_compute_disk.disk.*.name, count.index)}"
+   auto_delete = false
+
+   # make disk available as "/dev/disk/by-id/google-lvm"
+   # NOTE: "google-" prefix is auto added
+   device_name = "lvm"
+ }
 
   network_interface {
     network = "${var.network_name}"

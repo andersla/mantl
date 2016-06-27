@@ -8,6 +8,7 @@
     backrefs: yes
   tags:
     - logrotate
+    - packaging
 
 - name: set logrotate retention period to 7 days
   sudo: yes
@@ -18,6 +19,7 @@
     backrefs: yes
   tags:
     - logrotate
+    - packaging
 
 - name: copy component logrotate configurations
   become: yes

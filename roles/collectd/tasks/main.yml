@@ -12,6 +12,15 @@
     - bootstrap
     - packaging
 
+- name: disable collectd on packaging round
+  sudo: yes
+  service:
+    name: collectd
+    enabled: no
+  tags:
+    - collectd
+    - packaging
+
 - name: create collectd plugin directory
   sudo: yes
   file:
@@ -20,6 +29,7 @@
     mode: 0755
   tags:
   - collectd
+  - packaging
 
 - name: configure collectd
   sudo: yes
@@ -38,6 +48,7 @@
   when: ansible_selinux.status == "enabled" and ansible_selinux.mode == "enforcing"
   tags:
     - collectd
+    - packaging
 
 - name: check if collectd is authorized to connect to docker
   sudo: yes
@@ -48,6 +59,7 @@
   when: ansible_selinux.status == "enabled" and ansible_selinux.mode == "enforcing"
   tags:
     - collectd
+    - packaging
 
 - name: copy collectd selinux docker policy
   sudo: yes
@@ -55,6 +67,7 @@
   when: "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
   tags:
     - collectd
+    - packaging
 
 - name: authorize collectd to connect to docker
   sudo: yes
@@ -62,6 +75,7 @@
   when: "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
   tags:
     - collectd
+    - packaging
 
 - name: enable collectd
   sudo: yes

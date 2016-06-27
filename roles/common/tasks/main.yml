@@ -7,8 +7,6 @@
     dest: /etc/localtime
     state: link
     force: yes
-  tags:
-    - always_tag
 
 # add hosts to /etc/hosts
 - name: configure hosts file

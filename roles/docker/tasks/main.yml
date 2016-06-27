@@ -77,6 +77,12 @@
     state: directory
     name: "{{ docker_volume_mount }}"
     mode: 0755
+    
+- name: move local docker directory to temp before being moved to docker volume to be mounted
+  sudo: yes
+  command: mv "{{ docker_volume_mount }} /tmp{{ docker_volume_mount }}"
+  tags
+
 
 - name: mount docker storage
   sudo: yes
@@ -115,6 +121,21 @@
   tags:
     - docker
     - bootstrap
+
+- name: move local docker files to docker volume just mounted
+  sudo: yes
+  mount:
+    state: mounted
+    name: "{{ docker_volume_mount }}"
+    fstype: "{{ docker_volume_fs_type }}"
+    src: "{{ docker_volume_device }}"
+    dump: 1
+    passno: 2
+    opts: bind
+  when: docker_configure_lvm|bool
+  tags:
+    - disk
+    - docker
 
 - include: lvm.yml
   when: docker_lvm_backed|bool

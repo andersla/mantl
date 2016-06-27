@@ -47,6 +47,7 @@
   when: ansible_selinux.status == "enabled" and ansible_selinux.mode == "enforcing"
   tags:
     - logstash
+    - packaging
 
 - name: authorize logstash syslog port
   sudo: yes
@@ -54,6 +55,7 @@
   when: selinux_syslog_port_check.rc is defined and selinux_syslog_port_check.rc != 0
   tags:
     - logstash
+    - packaging
 
 - name: forward all logs from rsyslog to logstash
   sudo: yes
@@ -64,5 +66,6 @@
     - restart rsyslog
   tags:
     - logstash
+    - packaging
 
 - meta: flush_handlers

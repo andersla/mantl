@@ -81,7 +81,7 @@
     - check-service-active
   tags:
     - consul
-#   - packaging
+    - packaging
 
 - name: enable consul
   sudo: yes
