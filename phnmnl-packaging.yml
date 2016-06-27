@@ -15,7 +15,9 @@
     # Consul ACLs. If you only have one datacenter, set it to that or remove
     # this variable.
     # consul_acl_datacenter: your_primary_datacenter
+    
     docker_lvm_backed: false
+    provider: gce  
     consul_servers_group: role=control
   roles:
     - common
@@ -98,3 +100,17 @@
     glusterfs_mode: client
   roles:
     - glusterfs
+
+# finally disable docker service on the packer round (to make it possible to copy 
+# files from local docker dir /var/lib/docker to a second disk if one is to be attached
+- hosts: all
+  vars:
+  tasks:
+   - name: disable docker before shutting down
+     sudo: yes
+     service:
+       name: docker
+       enabled: no
+       state: stopped
+   tags:
+    - packaging
