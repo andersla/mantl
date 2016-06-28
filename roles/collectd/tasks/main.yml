@@ -10,6 +10,16 @@
   tags:
     - collectd
     - bootstrap
+    - packaging
+
+- name: disable collectd on packaging round
+  sudo: yes
+  service:
+    name: collectd
+    enabled: no
+  tags:
+    - collectd
+    - packaging
 
 - name: create collectd config directory
   sudo: yes
@@ -19,6 +29,7 @@
     mode: 0755
   tags:
     - collectd
+    - packaging
 
 - name: create collectd plugin directory
   sudo: yes
@@ -28,6 +39,7 @@
     mode: 0755
   tags:
   - collectd
+  - packaging
 
 - name: configure collectd
   sudo: yes

@@ -10,6 +10,7 @@
   tags:
     - mesos
     - bootstrap
+    - packaging
 
 - name: ensure consul.d is present
   sudo: yes

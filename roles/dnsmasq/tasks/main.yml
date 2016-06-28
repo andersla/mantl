@@ -7,6 +7,16 @@
   tags:
     - dnsmasq
     - bootstrap
+    - packaging
+
+- name: disable dnsmasq when packaging
+  sudo: yes
+  service:
+    name: dnsmasq
+    enabled: no
+  tags:
+    - dnsmasq
+    - packaging
 
 - name: remove consul from list of search domains
   sudo: yes

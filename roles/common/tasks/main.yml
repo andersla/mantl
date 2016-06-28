@@ -53,6 +53,7 @@
     name: yum-utils
   tags:
     - bootstrap
+    - packaging
 
 - name: increase timeouts in YUM
   sudo: yes
@@ -70,6 +71,7 @@
     state: latest
   tags:
     - bootstrap
+    - packaging
 
 - name: install system utilities
   sudo: yes
@@ -90,6 +92,7 @@
     - zookeepercli
   tags:
     - bootstrap
+    - packaging
 
 - name: enable chronyd
   sudo: yes
@@ -112,6 +115,8 @@
   yum:
     name: python-pip
     state: latest
+  tags:
+    - packaging
 
 - name: update setuptools and pip
   sudo: yes
@@ -121,6 +126,8 @@
   with_items:
     - name: pip
     - name: setuptools
+  tags:
+    - packaging
 
 - name: disable requiretty in sudoers
   sudo: yes
@@ -129,6 +136,8 @@
     state: present
     regexp: ^.+requiretty$
     line: "# Defaults	requiretty"
+  tags:
+    - packaging
 
 - name: configure selinux
   sudo: yes
@@ -138,8 +147,8 @@
   tags:
     - security
     - bootstrap
+    - packaging
 
 - include: users.yml
 - include: ssl.yml
-- include: ssh.yml
-- include: fail2ban.yml
+- include: distributive.yml

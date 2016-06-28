@@ -7,6 +7,7 @@
   tags:
     - mesos
     - bootstrap
+    - packaging
 
 - name: configure mesos-master unit file
   sudo: yes
@@ -55,7 +56,7 @@
   wait_for:
     host: "{{ mesos_zk_dns }}"
     port: "{{ mesos_zk_port }}"
-    delay: 10
+    delay: 1
     timeout: 300
     state: present
   tags:
@@ -75,7 +76,7 @@
   register: zk_acl_mesos
   until: zk_acl_mesos.rc == 0
   retries: 5
-  delay: 10
+  delay: 1
   tags:
     - mesos
 

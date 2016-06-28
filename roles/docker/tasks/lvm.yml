@@ -9,6 +9,7 @@
   tags:
     - docker
     - bootstrap
+    - packaging
 
 - name: configure lvm for docker
   sudo: yes
