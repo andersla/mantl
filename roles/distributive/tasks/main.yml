@@ -12,6 +12,7 @@
     - consul
     - distributive
     - docker
+    - packaging
 
 # Needed for upgrade from Mantl <1.1
 - name: remove symlink to deprecated distributive checklist
@@ -22,6 +23,7 @@
   tags:
     - bootstrap
     - distributive
+    - packaging
 
 # Needed for upgrade from Mantl <1.1
 - name: de-register deprecated distributive tests with consul
@@ -35,6 +37,7 @@
     - bootstrap
     - consul
     - distributive
+    - packaging
   with_items:
     - "{{ current_role }}"
     - chronos
@@ -47,6 +50,7 @@
   tags:
     - distributive
     - bootstrap
+    - packaging
   with_items:
     - "{{ distributive_package }}"
     - "distributive-{{ current_role }}-{{ checklist_versions[current_role] }}"
@@ -61,6 +65,7 @@
     - bootstrap
     - consul
     - distributive
+    - packaging
 
 - name: configure consul health check
   become: yes

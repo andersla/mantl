@@ -8,7 +8,6 @@
     state: present
   tags:
     - users
-    - packaging
 
 - name: create os users
   sudo: yes

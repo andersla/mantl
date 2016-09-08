@@ -22,13 +22,14 @@
   roles:
     - common
     - lvm
-    - collectd
-    - logrotate
-    - consul-template
     - docker
+    - logrotate
+ #   - collectd
+    - consul-template
     - logstash
     - nginx
     - consul
+    - etcd
     - dnsmasq
 
 # ROLES - after provisioning the software that's common to all hosts, we do
@@ -47,6 +48,7 @@
   gather_facts: no
   vars:
     mesos_mode: follower
+    zookeeper_server_group: role=control
   roles:
     - mesos
 
@@ -56,7 +58,7 @@
 # themselves, they only schedule work. That said, there should be at least 3 of
 # them (and always an odd number) so that ZooKeeper can get and keep a quorum.
 - hosts: role=control
-  gather_facts: no
+  gather_facts: yes
   vars:
     consul_servers_group: role=control
     mesos_leaders_group: role=control
@@ -69,12 +71,26 @@
     - marathon
     - chronos
     - mantlui
+    - kubernetes
+    - kubernetes-master
+    - kubernetes-addons
+
+- hosts: role=kubeworker
+  # role=worker hosts are a subset of "all". Since we already gathered facts on
+  # all servers, we can skip it here to speed up the deployment.
+  gather_facts: yes
+  vars:
+    consul_dns_domain: consul
+  roles:
+    - flannel
+    - kubernetes
+    - kubernetes-node
 
 # The edge role exists solely for routing traffic into the cluster. Firewall
 # settings should be such that web traffic (ports 80 and 443) is exposed to the
 # world.
 - hosts: role=edge
-  gather_facts: no
+  gather_facts: yes
   vars:
     # this is the domain that traefik will match on to do host-based HTTP
     # routing. Set it to a domain you control and add a star domain to route
@@ -88,29 +104,29 @@
 
 # Gluster distributed storage. Run this playbook after running the core playbook
 # (terraform.sample.yml)
-- hosts: role=control
-  vars:
-    glusterfs_mode: server
-  roles:
-    - glusterfs
-
-- hosts: role=worker
-  gather_facts: no
-  vars:
-    glusterfs_mode: client
-  roles:
-    - glusterfs
+#- hosts: role=control
+#  vars:
+#    glusterfs_mode: server
+#  roles:
+#    - glusterfs
+#
+#- hosts: role=worker
+#  gather_facts: no
+#  vars:
+#    glusterfs_mode: client
+#  roles:
+#    - glusterfs
 
 # finally disable docker service on the packer round (to make it possible to copy 
 # files from local docker dir /var/lib/docker to a second disk if one is to be attached
 - hosts: all
   vars:
   tasks:
-   - name: disable docker before shutting down
+   - name: disable docker before shutting down on packaging round
      sudo: yes
      service:
        name: docker
        enabled: no
        state: stopped
-   tags:
+  tags:
     - packaging

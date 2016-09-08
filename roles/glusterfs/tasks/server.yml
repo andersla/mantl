@@ -6,7 +6,7 @@
     state: present
   tags:
     - glusterfs
-    - packaging
+ #   - packaging
 
 - name: install glusterd.service
   sudo: yes

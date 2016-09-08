@@ -178,5 +178,3 @@
     - zookeeper
 
 - meta: flush_handlers
-
-- include: distributive.yml

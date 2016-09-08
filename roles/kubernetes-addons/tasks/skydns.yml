@@ -11,17 +11,17 @@
     - skydns
     - kubernetes
 
-- name: create/update skydns replication controller
-  sudo: yes
-  kube:
-    namespace: kube-system
-    resource: rc
-    name: kube-dns-v8
-    filename: "{{ kube_manifest_dir }}/skydns-rc.yaml"
-    state: "{{ dns_rc_def.changed | ternary('latest','present') }}"
-    server: "http://localhost:8085/"
-  run_once: true
-  tags:
-    - addons
-    - skydns
-    - kubernetes
+#- name: create/update skydns replication controller
+#  sudo: yes
+#  kube:
+#    namespace: kube-system
+#    resource: rc
+#    name: kube-dns-v8
+#    filename: "{{ kube_manifest_dir }}/skydns-rc.yaml"
+#    state: "{{ dns_rc_def.changed | ternary('latest','present') }}"
+#    server: "http://localhost:8085/"
+#  run_once: true
+#  tags:
+#    - addons
+#    - skydns
+#    - kubernetes

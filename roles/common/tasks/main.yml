@@ -7,6 +7,9 @@
     dest: /etc/localtime
     state: link
     force: yes
+  tags:
+    - common
+    - packaging
 
 # add hosts to /etc/hosts
 - name: configure hosts file
@@ -17,22 +20,24 @@
     mode: 0644
   tags:
     - common
+    - packaging
 
-- name: preserve hostname
-  sudo: yes
-  copy:
-    src: 02_hostname.cfg
-    dest: /etc/cloud/cloud.cfg.d/02_hostname.cfg
-    owner: root
-    group: root
-    mode: 0644
-  when: >
-    provider != "bare-metal" and
-    provider != "virtualbox" and
-    provider != "packer" and 
-    provider != "vsphere" 
-  tags:
-    - common
+#- name: preserve hostname
+#  sudo: yes
+#  copy:
+#    src: 02_hostname.cfg
+#    dest: /etc/cloud/cloud.cfg.d/02_hostname.cfg
+#    owner: root
+#    group: root
+#    mode: 0644
+#  when: >
+#    provider != "bare-metal" and
+#    provider != "virtualbox" and
+#    provider != "packer" and 
+#    provider != "vsphere" 
+#  tags:
+#    - common
+#    - packaging
 
 - name: set persistent hostname
   sudo: yes
@@ -45,6 +50,7 @@
     mode: 0644
   tags:
     - common
+    - packaging
 
 # add yum-utils if not already installed
 - name: add yum-config-manager
@@ -63,6 +69,8 @@
       value: 60.0
     - option: retries
       value: 30
+  tags:
+    - packaging
 
 - name: enable EPEL repo
   sudo: yes
@@ -151,4 +159,5 @@
 
 - include: users.yml
 - include: ssl.yml
-- include: distributive.yml
+- include: ssh.yml
+- include: fail2ban.yml
