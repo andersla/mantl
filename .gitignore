@@ -28,3 +28,9 @@ packer_cache/
 account.json
 # annoying osx files
 .DS_Store
+
+# anders test files
+gce.tf
+export_env_packer_google.sh
+export_env_packer_openstack_smog.sh
+test_ansible.yml

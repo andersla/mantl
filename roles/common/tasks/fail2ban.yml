@@ -8,6 +8,15 @@
     - bootstrap
     - common
     - fail2ban
+    - packaging
+    
+- name: disable fail2ban on packaging run
+  sudo: yes
+  service:
+    name: fail2ban
+    enabled: no
+  tags:
+    - packaging
 
 - name: enable fail2ban jails
   sudo: yes

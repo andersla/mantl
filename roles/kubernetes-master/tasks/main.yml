@@ -12,6 +12,7 @@
   tags:
     - master
     - kubernetes
+    - packaging
 
 - name: generate kubelet systemd unit
   sudo: yes

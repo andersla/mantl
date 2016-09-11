@@ -8,4 +8,5 @@
     state: touch
   tags:
     - bootstrap
+    - packaging
     - ssh

@@ -7,6 +7,7 @@
   tags:
     - zookeeper
     - bootstrap
+    - packaging
 
 - name: install zookeeper scripts
   sudo: yes
@@ -21,6 +22,7 @@
     - zookeeper-update-mantl-0.5-0.6.sh
   tags:
     - zookeeper
+    - packaging
 
 - name: create zookeeper user
   sudo: yes
@@ -67,6 +69,17 @@
     state: present
   tags:
     - zookeeper
+    - packaging
+
+# Dont autostart zookeeper on packaging
+- name: packaging disable zookeeper service
+  sudo: yes
+  service:
+    enabled: no
+    name: "{{ zookeeper_service }}"
+  tags:
+    - zookeeper
+    - packaging
 
 - name: create missing 'conf' symlink
   sudo: yes
@@ -76,6 +89,7 @@
     dest: /opt/mesosphere/zookeeper/conf
   tags:
     - zookeeper
+    - packaging
 
 - name: create zookeeper auth digest
   sudo: yes

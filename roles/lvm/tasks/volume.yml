@@ -9,6 +9,7 @@
     - docker
     - bootstrap
     - lvm
+    - packaging
 
 - name: install LVM tools
   sudo: yes
@@ -19,6 +20,7 @@
     - docker
     - bootstrap
     - lvm
+    - packaging
 
 - name: enable lvmetad service
   sudo: yes

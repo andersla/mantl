@@ -13,6 +13,7 @@
     - "{{ kube_users_dir }}"
   tags:
     - kubernetes
+    - packaging
 
 - name: pull hyperkube docker image
   sudo: yes
@@ -21,6 +22,7 @@
   changed_when: docker_pull_result.stdout.find('newer') > -1
   tags:
     - kubernetes
+    - packaging
 
 - include: secrets.yml
   tags:

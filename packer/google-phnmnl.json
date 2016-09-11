@@ -1,0 +1,90 @@
+{
+	"variables":
+	{
+	  "image_name": "{{env `PACKER_IMAGE_NAME`}}",
+	  "source_image_name": "{{env `PACKER_SOURCE_IMAGE_NAME`}}",
+      "account_file": "{{env `PACKER_GCE_ACCOUNT_FILE`}}",
+      "zone": "{{env `PACKER_GCE_ZONE`}}",
+      "project_id": "{{env `PACKER_GCE_PROJECT_ID`}}",
+      "staging": "/tmp/packer-provisioner-ansible-local"    
+ 	},
+    "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "{{user `account_file`}}",
+      "project_id": "{{user `project_id`}}",
+      "zone": "{{user `zone`}}",
+      "ssh_username": "centos",
+      "ssh_pty" : "true",
+      "source_image": "{{user `source_image_name`}}",
+	  "image_name": "{{user `image_name`}}"
+    }
+    ],
+	"provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": ["{{pwd}}/packer/scripts/ansible.sh"]
+    },
+    {
+      "type": "shell",
+      "inline": "mkdir -p {{user `staging`}}"
+    },
+    {
+      "type": "file",
+      "source": "{{pwd}}/group_vars",
+      "destination": "{{user `staging`}}"
+    },
+    {
+      "type": "file",
+      "source": "{{pwd}}/library",
+      "destination": "{{user `staging`}}"
+    },
+    {
+      "type": "file",
+      "source": "{{pwd}}/playbooks",
+      "destination": "{{user `staging`}}"
+    },
+    {
+      "type": "file",
+      "source": "{{pwd}}/plugins",
+      "destination": "{{user `staging`}}"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_dir": "{{pwd}}/playbooks",
+      "playbook_file": "{{pwd}}/phnmnl-packaging.yml",
+      "role_paths": [
+        "{{pwd}}/roles/chronos",
+        "{{pwd}}/roles/common",
+        "{{pwd}}/roles/consul",
+        "{{pwd}}/roles/consul-template",
+        "{{pwd}}/roles/distributive",
+        "{{pwd}}/roles/dnsmasq",
+        "{{pwd}}/roles/docker",
+        "{{pwd}}/roles/etcd",
+        "{{pwd}}/roles/glusterfs",
+        "{{pwd}}/roles/kubernetes", 
+        "{{pwd}}/roles/kubernetes-master",
+        "{{pwd}}/roles/kubernetes-node",
+        "{{pwd}}/roles/kubernetes-addons",
+        "{{pwd}}/roles/flannel",
+        "{{pwd}}/roles/logrotate",
+        "{{pwd}}/roles/logstash",
+        "{{pwd}}/roles/lvm",
+        "{{pwd}}/roles/mantlui",
+        "{{pwd}}/roles/marathon",
+        "{{pwd}}/roles/mesos",
+        "{{pwd}}/roles/nginx",
+        "{{pwd}}/roles/traefik",
+        "{{pwd}}/roles/vault",
+        "{{pwd}}/roles/zookeeper",
+        "{{pwd}}/roles/handlers",
+        "{{pwd}}/roles/repos"
+        
+      ],
+      "extra_arguments": [ "--tags", "\"packaging,pack_or_deploy\"", "--extra-vars=\"provider=gce\"" ],
+      "inventory_groups": "role=edge,role=control,role=worker,role=kubeworker"
+    }
+  ]
+}

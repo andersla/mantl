@@ -1,0 +1,77 @@
+{
+    "variables":
+    {
+      "image_name": "{{env `PACKER_IMAGE_NAME`}}",
+      "source_image_name": "{{env `PACKER_SOURCE_IMAGE_NAME`}}",
+      "network": "{{env `PACKER_NETWORK`}}",
+      "flavour": "{{env `PACKER_FLAVOUR`}}",
+      "floating_ip_pool": "{{env `PACKER_FLOATING_IP_POOL`}}"
+ 	},
+	"builders": [
+    {
+      "type": "openstack",
+      "image_name": "{{user `image_name`}}",
+      "source_image_name": "{{user `source_image_name`}}",
+      "flavor": "{{user `flavour`}}",
+      "ssh_username": "centos",
+      "ssh_pty": true,
+      "floating_ip_pool": "{{user `floating_ip_pool`}}",
+      "networks": ["{{user `network`}}"],
+      "availability_zone": "{{user `availability_zone`}}"
+    }
+    ],
+	"provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": ["{{pwd}}/packer/scripts/ansible.sh"]
+    },
+	{
+	  "type": "ansible-local",
+	  "playbook_dir": "{{pwd}}/playbooks",
+	  "playbook_file": "{{pwd}}/playbooks/upgrade-packages.yml"
+	},
+	{
+	  "type": "shell",
+	  "inline": ["sudo reboot -h now"]
+    },
+    {
+      "type": "shell",
+      "pause_before": "10s",
+      "start_retry_timeout": "15m",
+      "inline": ["echo $(date) > /tmp/rebooted"]
+	},
+    {
+      "type": "shell",
+      "inline": ["mkdir /tmp/packer-provisioner-ansible-local/library"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_dir": "{{pwd}}/playbooks",
+      "playbook_file": "{{pwd}}/phnmnl-packaging.yml",
+      "role_paths": [
+        "{{pwd}}/roles/chronos",
+        "{{pwd}}/roles/collectd",
+        "{{pwd}}/roles/common",
+        "{{pwd}}/roles/consul",
+        "{{pwd}}/roles/consul-template",
+        "{{pwd}}/roles/dnsmasq",
+        "{{pwd}}/roles/docker",
+        "{{pwd}}/roles/glusterfs",
+        "{{pwd}}/roles/logrotate",
+        "{{pwd}}/roles/logstash",
+        "{{pwd}}/roles/lvm",
+        "{{pwd}}/roles/mantlui",
+        "{{pwd}}/roles/marathon",
+        "{{pwd}}/roles/mesos",
+        "{{pwd}}/roles/nginx",
+        "{{pwd}}/roles/traefik",
+        "{{pwd}}/roles/vault",
+        "{{pwd}}/roles/zookeeper",
+        "{{pwd}}/roles/handlers"
+      ],
+      "extra_arguments": [ "--tags", "packaging,always_tag", "--extra-vars=\"provider=openstack\"" ],
+      "inventory_groups": "role=edge,role=control,role=worker"
+    }
+  ]
+}

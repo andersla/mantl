@@ -3,7 +3,7 @@
   wait_for:
     host: "{{ marathon_zk_dns }}"
     port: "{{ marathon_zk_port }}"
-    delay: 10
+    delay: 1
     timeout: 300
     state: present
   tags:
@@ -23,7 +23,7 @@
   register: zk_acl_marathon
   until: zk_acl_marathon.rc == 0
   retries: 5
-  delay: 10
+  delay: 1
   tags:
     - marathon
 

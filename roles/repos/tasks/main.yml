@@ -4,9 +4,11 @@
     src: "{{ item }}"
     dest: "/etc/yum.repos.d/{{ item }}"
   with_items:
+    - asteris-mantl-rpm.repo
     - ciscocloud-rpm.repo
   tags:
     - bootstrap
+    - packaging
 
 - name: enable templated yum repos
   sudo: yes
@@ -17,3 +19,4 @@
     - asteris-mantl-rpm.repo
   tags:
     - bootstrap
+    - packaging
