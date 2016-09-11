@@ -13,7 +13,6 @@
     - "{{ kube_users_dir }}"
   tags:
     - kubernetes
-    - packaging
 
 - name: pull hyperkube docker image
   sudo: yes

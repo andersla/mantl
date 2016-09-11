@@ -7,7 +7,7 @@
   tags:
     - mesos
     - bootstrap
-    - packaging
+#    - packaging
 
 - name: configure mesos-master unit file
   sudo: yes

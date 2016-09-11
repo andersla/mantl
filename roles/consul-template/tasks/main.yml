@@ -28,7 +28,6 @@
     - reload consul-template
   tags:
     - consul-template
-    - packaging
 
 - name: enable consul-template
   sudo: yes

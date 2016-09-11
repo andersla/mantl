@@ -24,9 +24,8 @@
     - lvm
     - docker
     - logrotate
- #   - collectd
     - consul-template
-    - logstash
+#    - logstash
     - nginx
     - consul
     - etcd
@@ -51,6 +50,12 @@
     zookeeper_server_group: role=control
   roles:
     - mesos
+    
+- hosts: role=kubeworker
+  gather_facts: yes
+  roles:
+    - kubernetes
+    - kubernetes-node
 
 # the control nodes are necessarily more complex than the worker nodes, and have
 # ZooKeeper, Mesos, and Marathon leaders. In addition, they control Vault to
@@ -75,17 +80,6 @@
     - kubernetes-master
     - kubernetes-addons
 
-- hosts: role=kubeworker
-  # role=worker hosts are a subset of "all". Since we already gathered facts on
-  # all servers, we can skip it here to speed up the deployment.
-  gather_facts: yes
-  vars:
-    consul_dns_domain: consul
-  roles:
-    - flannel
-    - kubernetes
-    - kubernetes-node
-
 # The edge role exists solely for routing traffic into the cluster. Firewall
 # settings should be such that web traffic (ports 80 and 443) is exposed to the
 # world.
@@ -98,7 +92,7 @@
     #
     # For those migrating from haproxy, this variable serves the same purpose
     # and format as `haproxy_domain`.
-    traefik_marathon_domain: demo.phenomenal.cloud
+    traefik_marathon_domain: datacenter1.uservice.se
   roles:
     - traefik
 
