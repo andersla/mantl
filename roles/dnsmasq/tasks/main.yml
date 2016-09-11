@@ -7,8 +7,10 @@
   tags:
     - dnsmasq
     - bootstrap
-#    - packaging
+    - packaging
 
+# Dont worry about automatically started on all hosts
+# - it is supposed to be on all
 #- name: disable dnsmasq when packaging
 #  sudo: yes
 #  service:

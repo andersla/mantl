@@ -1,5 +1,7 @@
 {
     "variables": {
+        "atlas_username": "{{env `ATLAS_USERNAME`}}",
+        "atlas_name": "{{env `ATLAS_NAME`}}",
         "root": "{{template_dir}}/..",
         "scripts": "{{template_dir}}/scripts",
         "staging": "/tmp/packer-provisioner-ansible-local"
@@ -107,6 +109,16 @@
                 "keep_input_artifact": false
             },
             {
+                "type": "atlas",
+                "token": "{{user `atlas_token`}}",
+                "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+                "artifact_type": "vagrant.box",
+                "metadata": {
+                    "created_at": "{{timestamp}}",
+                    "provider": "virtualbox"
+                }
+            },
+            {
                 "type": "shell-local",
                 "inline": [
                     "mv builds/VirtualBox-mantl.box builds/mantl-bootstrap-$(git describe --tags --always --dirty).box"
@@ -114,5 +126,10 @@
             }
 
         ]
-    ]
+    ],
+    "push": {
+        "base_dir": "..",
+        "vcs": true,
+        "exclude": ["docs"]
+    }
 }

@@ -9,7 +9,7 @@
     - bootstrap
     - packaging
 
-# disable when packagingt
+# disable when packaging
 - name: disable consul-template
   sudo: yes
   service:
