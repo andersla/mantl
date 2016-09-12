@@ -98,18 +98,18 @@
 
 # Gluster distributed storage. Run this playbook after running the core playbook
 # (terraform.sample.yml)
-#- hosts: role=control
-#  vars:
-#    glusterfs_mode: server
-#  roles:
-#    - glusterfs
-#
-#- hosts: role=worker
-#  gather_facts: no
-#  vars:
-#    glusterfs_mode: client
-#  roles:
-#    - glusterfs
+- hosts: role=control
+  vars:
+    glusterfs_mode: server
+  roles:
+    - glusterfs
+
+- hosts: role=worker
+  gather_facts: no
+  vars:
+    glusterfs_mode: client
+  roles:
+    - glusterfs
 
 # finally disable docker service on the packer round (to make it possible to copy 
 # files from local docker dir /var/lib/docker to a second disk if one is to be attached
